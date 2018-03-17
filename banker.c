@@ -35,7 +35,28 @@ int tF[10],tW[1][10];
 pthread_mutex_t lock;
 
 
+void Mprint(int x[][10],int n,int m)
+{
+	int i,j;
+	printf("\n");	
+	
+	for(i=0;i<m;i++)
+	{
+			printf("\tR%d",i);
+
+	}
+	
+	for(i=0;i<n;i++)
+	{
+		printf("\nP%d\t",i); //P[i]
+		for(j=0;j<m;j++)
+		{
+			printf("%d\t",x[i][j]);
+		}
+	}	
+}
+
 int main()
 {
-	printf("\n DEADLOCK AVOIDANCE USING BANKER'S ALGORITHM\n");	
+	printf("\n DEADLOCK AVOIDANCE USING BANKER'S ALGORITHM\n");
 }
