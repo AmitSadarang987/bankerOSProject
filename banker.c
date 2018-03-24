@@ -56,7 +56,62 @@ void Mprint(int x[][10],int n,int m)
 	}	
 }
 
+
+void accept(int A[][10],int N[][10],int M[10][10],int W[1][10],int *n,int *m)
+{
+	int i,j;
+	printf("\n Enter total no. of processes in Multithread  : ");
+	scanf("%d",n);
+	printf("\n Enter total no. of resources : ");
+	scanf("%d",m);
+	for(i=0;i<*n;i++)
+	{
+		printf("\n Process %d\n",i+1);
+		for(j=0;j<*m;j++){
+			printf(" Allocation for resource %d : ",j+1);
+			scanf("%d",&A[i][j]);
+			printf(" Maximum for resource %d : ",j+1);
+			scanf("%d",&M[i][j]);
+		}
+	}
+	printf("\n Available resources : \n");
+	for(i=0;i<*m;i++)
+	{
+		printf(" Resource %d : ",i+1);
+		scanf("%d",&W[0][i]);
+	}
+
+	// CALCULATE NeeD of Process 
+	for(i=0;i<*n;i++)
+	{
+		for(j=0;j<*m;j++)
+		{
+			N[i][j]=M[i][j]-A[i][j];
+		}
+	}
+
+	//calling my function to print	
+	printf("\n Allocation Matrix");
+	Mprint(A,*n,*m);
+
+	printf("\n\n Maximum Requirement Matrix");
+	Mprint(M,*n,*m);
+
+	printf("\n\n Need Matrix");
+	Mprint(N,*n,*m);
+
+}
+
+
+
 int main()
 {
+	
 	printf("\n DEADLOCK AVOIDANCE USING BANKER'S ALGORITHM\n");
+	
+	// ACCepting -> to taken the Argument value
+	accept(A,N,M,W,&n,&m);
+
+
+
 }
