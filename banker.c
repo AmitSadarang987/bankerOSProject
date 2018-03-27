@@ -57,6 +57,38 @@ void Mprint(int x[][10],int n,int m)
 }
 
 
+int banker(int A[][10],int N[][10],int W[1][10],int n,int m)
+{
+	int j,i,a[10];
+	
+		
+
+	// Calling the SAFETY function
+	j=safety(A,N,W,n,m,a);
+
+       // j==1 means SAFE And j==0 means Not SAFE
+
+	if(j != 0 )
+	{
+		printf("\n\n");
+
+		for(i=0;i<n;i++)
+		{
+		     printf(" P%d  ",a[i]);
+			Pseq[i]=a[i];
+		}
+		printf("\n A safety sequence has been detected.\n");
+		return 1;// to "ret" variable
+	}
+	else
+	{
+		printf("\n Deadlock has occured.\n");
+		return 0;// to "ret" variable
+	}
+}
+
+
+
 void accept(int A[][10],int N[][10],int M[10][10],int W[1][10],int *n,int *m)
 {
 	int i,j;
@@ -112,6 +144,8 @@ int main()
 	// ACCepting -> to taken the Argument value
 	accept(A,N,M,W,&n,&m);
 
+	// use to check the safty
+	ret=banker(A,N,W,n,m);
 
 
 }
