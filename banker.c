@@ -57,6 +57,123 @@ void Mprint(int x[][10],int n,int m)
 }
 
 
+
+//Resource Request algorithm
+void add_request(int A[10][10],int N[10][10],int AV[10][10],int pid,int m)
+{
+	int reqmat[1][10];
+	int i;
+	printf("\n Enter additional request from any process :- \n");
+	for(i=0;i<m;i++)
+	{
+		printf(" Request for resource %d : ",i+1);
+		scanf("%d",&reqmat[0][i]);
+	}
+	
+	for(i=0;i<m;i++)
+	{	
+		if(reqmat[0][i] > N[pid][i])
+		{
+			printf("\n Sorry this will lead to  UnSafe State  \n MyError encountered.\n");
+			//Since You  enter more than Need
+			exit(0);
+		}
+	}
+
+	for(i=0;i<m;i++)
+	{
+		if(reqmat[0][i] > AV[0][i])
+		{
+			printf("\n Sorry this will lead to  UnSafe State  \n Since  Resources unavailable.\n");
+			exit(0);
+		}
+	}
+	
+	// update the After REquest is APPROVED
+	for(i=0;i<m;i++)
+	{
+		AV[0][i]-=reqmat[0][i];
+		A[pid][i]+=reqmat[0][i];
+		N[pid][i]-=reqmat[0][i];
+	}
+}
+
+//Safety algorithm
+int safety(int A[][10],int N[][10],int AV[1][10],int n,int m,int a[])
+{
+
+	int i,j,k,x=0;
+	
+	int pflag=0,flag=0;
+
+	// Fininsh array process initially false
+	for(i=0;i<n;i++)
+	{
+		F[i]=0;
+	}
+       // Work Array process
+	for(i=0;i<m;i++)
+	{
+		W[0][i]=AV[0][i];
+	}
+
+	//
+	int c=0;
+	while(c<n)
+	{
+		bool found = false;
+		for(i=0;i<n;i++)
+		{
+			if(F[i] == 0)
+			{
+				int j;
+				for(j=0;j<m;j++)
+				{
+					if(N[i][j] > W[0][j])//checking all Resource from  R1 to Rm is Available in Work for p[i]
+					{
+						
+						break;//jump out of loop and  j!=m...
+					}
+				}
+
+				if(j==m)//if J==m  means proccess P[i] can do it JOb//otherwise P can not do its work
+				{
+					for(int k=0;k<m;k++)
+					{
+						W[0][k]+=A[i][k];
+					}
+
+					//storing the Seq
+					a[c++]=i;//Also increses the "c" to terminate// storing p[i] process rank
+					F[i]=1;
+					found=true;
+					
+					
+				}
+			}
+		}
+		
+		if(found==false)
+		{
+			return 0;// means not in save
+		}
+
+	}
+      /*//saving my P Sequence Globally
+	for(int e=0;e<n;e++)
+	{
+		Pseq[e]=a[e];
+	}
+	*/
+	return 1;// to 'j' variable
+
+}
+
+
+
+
+
+
 int banker(int A[][10],int N[][10],int W[1][10],int n,int m)
 {
 	int j,i,a[10];
@@ -147,5 +264,28 @@ int main()
 	// use to check the safty
 	ret=banker(A,N,W,n,m);
 
+	if(ret !=0 )// "ret=1" will indicate the System in SAFE 
+	{
+		printf("\n Do you want make an additional request ?\n press Keydown '1' for yes and '0' for No");
+		scanf("%d",&ch);
+		if(ch == 1)
+		{
+			printf("\n Enter Process ID no. : ");
+			scanf("%d",&pid);
+			add_request(A,N,W,pid-1,m);
+			ret=banker(A,N,W,n,m);
+			if(ret == 0 )// "ret=1" will  indicate the System in UNsafe 
+			{
+				exit(0);
+			}
+		}
+	}
+	else
+	{
+			exit(0);
+	}
+	printf("\n Now DECTECTION of SAFE sequence is completed...\n NOW the Game Begin \t ");
+
+////////////////////////////////
 
 }
