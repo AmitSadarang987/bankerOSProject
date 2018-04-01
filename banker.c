@@ -24,6 +24,8 @@ int n,m,pid,ch;
 int F[10],W[1][10];
 int Pseq[10];
 
+int amount=100;
+
 int counter=0;
 int Tret;
 int tA[10][10];
@@ -171,6 +173,63 @@ int safety(int A[][10],int N[][10],int AV[1][10],int n,int m,int a[])
 
 
 
+void* BankerThreadFun()
+{
+	unsigned long i = 0;
+    pthread_t id = pthread_self();
+    
+	dc++;
+
+///////////////////////////////////////		
+	pthread_mutex_lock(&lock);
+ 	printf("\nhere P%d needs Resource to complete its job \n",ps);
+	for(i=0;i<m;i++)
+	{
+			printf("\tR%d",i);
+
+	}
+	printf("\nP%d",ps);
+	for(int j=0;j<m;j++)
+	{
+		printf("\t%d",N[ps][j]);
+	}
+
+    	counter += 1;
+    	printf("\n Process %d has started\n", ps);
+	int amountC=amount;
+	sleep(1);//checking Other process ACCESS the amount 	
+	if(counter%2==0)
+	{
+		amountC=amountC+100;
+		amount=amountC;
+		printf(" Prosess %d  has Increases the Amount by 100 \n", ps);
+		printf(" Now amount is  %d  \n",amount);
+	}
+	else
+	{
+		amountC=amountC-10;
+		amount=amountC;
+		printf(" Process %d has Decreses the Amount by 10 \n", ps);
+		printf(" Now amount is  %d  \n",amount);
+		
+	}
+
+	printf(" process %d has Completed\n", ps);
+	printf(" Resouces released by by process %d \n",ps);
+	for(i=0;i<m;i++)
+	{
+			printf("\tR%d",i);
+
+	}
+	printf("\nP%d",ps);
+	for(int j=0;j<m;j++)
+	{
+		printf("\t%d",M[ps][j]);
+	}
+	pthread_mutex_unlock(&lock);
+/////////////////// //////////////////////
+
+}
 
 
 
@@ -251,7 +310,10 @@ void accept(int A[][10],int N[][10],int M[10][10],int W[1][10],int *n,int *m)
 
 }
 
+void* BankerThreadFun()
+{
 
+}
 
 int main()
 {
@@ -287,5 +349,26 @@ int main()
 	printf("\n Now DECTECTION of SAFE sequence is completed...\n NOW the Game Begin \t ");
 
 ////////////////////////////////
+
+	
+	int error;
+	pthread_mutex_init(&lock, NULL);
+
+	int j;	
+	for(j=0;j<n;j++)
+	{
+		ps=Pseq[j];
+		int need[1][1];
+		int max[1][1];
+	printf("\n\n\n Process number = %d",ps); 
+    	  //pthread_create(&Ttid[s], NULL, myThreadFun,(void*)need,(void*)max);
+	  pthread_create(&Ttid[ps], NULL, &BankerThreadFun,NULL);
+	  pthread_join(Ttid[ps],NULL);
+	 // sleep(1);
+	 
+	}
+
+
+	pthread_mutex_destroy(&lock);
 
 }
