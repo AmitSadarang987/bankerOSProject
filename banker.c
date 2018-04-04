@@ -24,7 +24,7 @@ int n,m,pid,ch;
 int F[10],W[1][10];
 int Pseq[10];
 
-int amount=100;
+int amount=400;
 
 int counter=0;
 int Tret;
@@ -310,10 +310,7 @@ void accept(int A[][10],int N[][10],int M[10][10],int W[1][10],int *n,int *m)
 
 }
 
-void* BankerThreadFun()
-{
 
-}
 
 int main()
 {
